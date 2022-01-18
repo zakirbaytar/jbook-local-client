@@ -47,6 +47,7 @@ const Filters: { [key: string]: OnLoadOptions } = {
   Index: { filter: /^index\.js$/ },
   JS: { filter: /.jsx?$/ },
   CSS: { filter: /.css$/ },
+  Any: { filter: /.*/ },
 };
 
 export const fetchPlugin = (textInput: string) => {
@@ -55,6 +56,13 @@ export const fetchPlugin = (textInput: string) => {
     setup: (build: PluginBuild) => {
       build.onLoad(Filters.Index, async (args: OnLoadArgs) => {
         return { loader: "jsx", contents: textInput };
+      });
+
+      build.onLoad(Filters.Any, async (args: OnLoadArgs) => {
+        const cachedResult = await fileCache.getItem<OnLoadResult>(args.path);
+        if (cachedResult) {
+          return cachedResult;
+        }
       });
 
       build.onLoad(Filters.JS, async (args: OnLoadArgs) => {
