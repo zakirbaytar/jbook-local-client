@@ -54,7 +54,7 @@ export const fetchPlugin = (textInput: string) => {
   return {
     name: "fetch-plugin",
     setup: (build: PluginBuild) => {
-      build.onLoad(Filters.Index, async (args: OnLoadArgs) => {
+      build.onLoad(Filters.Index, async () => {
         return { loader: "jsx", contents: textInput };
       });
 
