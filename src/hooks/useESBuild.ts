@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as esbuild from "esbuild-wasm";
 import { unpkgPathPlugin } from "../plugins/unpkg-path-plugin";
 import { fetchPlugin } from "../plugins/fetch-plugin";
@@ -10,14 +10,16 @@ interface ESBuildHookOptions {
 const useESBuild = ({ autoStart }: ESBuildHookOptions) => {
   const service = useRef<esbuild.Service | null>(null);
 
+  const initService = useCallback(() => {
+    if (autoStart) startService();
+  }, [autoStart]);
+
   useEffect(() => {
-    if (autoStart) {
-      startService();
-    }
+    initService();
     return () => {
       service.current?.stop();
     };
-  }, []);
+  }, [initService]);
 
   const startService = async () => {
     if (!service.current) {
