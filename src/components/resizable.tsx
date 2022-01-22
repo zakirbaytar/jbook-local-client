@@ -1,21 +1,32 @@
+import { useState, useEffect } from "react";
 import { ResizableBox, ResizableBoxProps } from "react-resizable";
 
 import "./resizable.css";
 
 type Direction = "horizontal" | "vertical";
 
+interface GetResizableBoxPropsArgs {
+  direction: Direction;
+  innerWidth: number;
+  innerHeight: number;
+}
+
 interface ResizableProps {
   direction: Direction;
 }
 
-function getResizableBoxProps(direction: Direction): ResizableBoxProps {
+function getResizableBoxProps({
+  direction,
+  innerWidth,
+  innerHeight,
+}: GetResizableBoxPropsArgs): ResizableBoxProps {
   if (direction === "horizontal") {
     return {
       className: "resizable--horizontal",
-      width: window.innerWidth * 0.75,
+      width: innerWidth * 0.75,
       height: Infinity,
-      minConstraints: [window.innerWidth * 0.2, Infinity],
-      maxConstraints: [window.innerWidth * 0.75, Infinity],
+      minConstraints: [innerWidth * 0.2, Infinity],
+      maxConstraints: [innerWidth * 0.75, Infinity],
       resizeHandles: ["e"],
     };
   }
@@ -24,14 +35,33 @@ function getResizableBoxProps(direction: Direction): ResizableBoxProps {
     width: Infinity,
     height: 300,
     minConstraints: [Infinity, 24],
-    maxConstraints: [Infinity, window.innerHeight * 0.75],
+    maxConstraints: [Infinity, innerHeight * 0.75],
     resizeHandles: ["s"],
   };
 }
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      setInnerWidth(window.innerWidth);
+      setInnerHeight(window.innerHeight);
+    };
+
+    window.addEventListener("resize", resizeHandler);
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
+
   return (
-    <ResizableBox {...getResizableBoxProps(direction)}>{children}</ResizableBox>
+    <ResizableBox
+      {...getResizableBoxProps({ direction, innerHeight, innerWidth })}
+    >
+      {children}
+    </ResizableBox>
   );
 };
 
