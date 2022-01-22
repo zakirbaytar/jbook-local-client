@@ -65,18 +65,18 @@ export const fetchPlugin = (textInput: string) => {
         }
       });
 
-      build.onLoad(Filters.JS, async (args: OnLoadArgs) => {
-        const fetchResponse = await axios.get(args.path);
-        const result = getLoadResult({ loader: "jsx", fetchResponse });
-        return await fileCache.setItem(args.path, result);
-      });
-
       build.onLoad(Filters.CSS, async (args: OnLoadArgs) => {
         const fetchResponse = await axios.get(args.path);
         const result = getLoadResult({
           loader: "jsx",
           fetchResponse: transformCSSResponse(fetchResponse),
         });
+        return await fileCache.setItem(args.path, result);
+      });
+
+      build.onLoad(Filters.Any, async (args: OnLoadArgs) => {
+        const fetchResponse = await axios.get(args.path);
+        const result = getLoadResult({ loader: "jsx", fetchResponse });
         return await fileCache.setItem(args.path, result);
       });
     },
