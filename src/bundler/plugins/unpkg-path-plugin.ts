@@ -27,18 +27,18 @@ export const unpkgPathPlugin = () => {
     name: "unpkg-path-plugin",
     setup(build: PluginBuild) {
       build.onResolve(Filters.Index, async (args: OnResolveArgs) => {
-        return { path: args.path, namespace: "unpkg" };
+        return { path: args.path, namespace: "jbook" };
       });
 
       build.onResolve(Filters.Relative, async (args: OnResolveArgs) => {
         return {
           path: generateUrl(args.path, args.resolveDir),
-          namespace: "unpkg",
+          namespace: "jbook",
         };
       });
 
       build.onResolve(Filters.Package, async (args: OnResolveArgs) => {
-        return { path: generateUrl(args.path), namespace: "unpkg" };
+        return { path: generateUrl(args.path), namespace: "jbook" };
       });
     },
   };
