@@ -1,34 +1,36 @@
 import React, { useState } from "react";
+
+import Resizable from "./resizable";
 import CodeEditor from "./code-editor";
 import Preview from "./preview";
 
 import { bundle } from "../bundler";
-import Resizable from "./resizable";
+import { debounce } from "../utils";
 
 import "./code-cell.css";
 
 const CodeCell: React.FC = () => {
-  const [input, setInput] = useState("");
   const [code, setCode] = useState("");
+  const [error, setError] = useState(null);
 
-  const onClick = async () => {
-    const output = await bundle(input);
+  const onChange = debounce<any>(async (value) => {
+    const output = await bundle(value);
     if (!output) return;
 
-    setCode(output);
-  };
+    setCode(output.code);
+    setError(output.error);
+  }, 2000);
 
   return (
     <React.Fragment>
       <Resizable direction="vertical">
         <section className="code-cell">
           <Resizable direction="horizontal">
-            <CodeEditor onChange={(value) => setInput(value)} />
+            <CodeEditor onChange={onChange} />
           </Resizable>
-          <Preview code={code} />
+          <Preview code={code} error={error} />
         </section>
       </Resizable>
-      <button onClick={onClick}>Submit</button>
     </React.Fragment>
   );
 };
