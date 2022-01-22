@@ -9,6 +9,7 @@ import useSave from "../hooks/useSave";
 
 import JSXHighlighter from "../utils/JSXHighlighter";
 import "./syntax-highlights.css";
+import "./code-editor.css";
 
 interface CodeEditorProps {
   initialValue?: string;
@@ -61,23 +62,25 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <MonacoEditor
-      theme="vs-dark"
-      defaultLanguage="javascript"
-      defaultValue={initialValue}
-      onMount={onEditorMount}
-      height={240}
-      options={{
-        wordWrap: "on",
-        minimap: { enabled: false },
-        folding: false,
-        lineNumbersMinChars: 3,
-        fontSize: 16,
-        scrollBeyondLastLine: false,
-        automaticLayout: true,
-      }}
-      wrapperProps={{ className: "editor-wrapper" }}
-    />
+    <div className="editor">
+      <MonacoEditor
+        theme="vs-dark"
+        defaultLanguage="javascript"
+        defaultValue={initialValue}
+        onMount={onEditorMount}
+        height="100%"
+        options={{
+          wordWrap: "on",
+          minimap: { enabled: false },
+          folding: false,
+          lineNumbersMinChars: 3,
+          fontSize: 16,
+          scrollBeyondLastLine: false,
+          automaticLayout: true,
+        }}
+        wrapperProps={{ className: "editor-wrapper" }}
+      />
+    </div>
   );
 };
 
