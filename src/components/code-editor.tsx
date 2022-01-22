@@ -22,24 +22,35 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   autoFormat = true,
   onChange,
 }) => {
+  const timer = useRef<NodeJS.Timer>();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   const prettifyContent = useCallback(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
+    try {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
 
-    const model = editor.getModel();
-    if (!model) return;
+      timer.current = setTimeout(() => {
+        const editor = editorRef.current;
+        if (!editor) return;
 
-    const formatted = prettier.format(model.getValue(), {
-      parser: "babel",
-      plugins: [parser],
-      useTabs: false,
-      semi: true,
-    });
+        const model = editor.getModel();
+        if (!model) return;
 
-    editor.setValue(formatted);
-    editor.setPosition({ lineNumber: model.getLineCount() + 1, column: 0 });
+        const formatted = prettier.format(model.getValue(), {
+          parser: "babel",
+          plugins: [parser],
+          useTabs: false,
+          semi: true,
+        });
+
+        editor.setValue(formatted);
+        editor.setPosition({ lineNumber: model.getLineCount() + 1, column: 0 });
+      }, 250);
+    } catch (error) {
+      // Parse error
+    }
   }, [editorRef]);
 
   useSave(() => {
