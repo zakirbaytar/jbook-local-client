@@ -17,16 +17,13 @@ const html = `<html>
   <body>
     <div id="root"></div>
     <script>
-      window.addEventListener("message", (event) => {
-        try {
-          eval(event.data);
-        }
-        catch(error){
-          const root = document.getElementById("root");
-          root.innerHTML = '<div style="color: red;"><h4>Runtime Error:</h4>' + error + '</div>';
-          console.error(error);
-        }
-      }, false);
+      function handleError(error){
+        const root = document.getElementById("root");
+        root.innerHTML = '<div style="color: red;"><h4>Runtime Error:</h4>' + error + '</div>';
+      }
+
+      window.addEventListener("message", (event) => eval(event.data));
+      window.addEventListener("error", (event) => handleError(event.error));
     </script>
   </body>
 </html>`;
