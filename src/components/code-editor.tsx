@@ -9,6 +9,7 @@ import useSave from "../hooks/useSave";
 
 import JSXHighlighter from "../utils/JSXHighlighter";
 import "./syntax-highlights.css";
+import "./code-editor.css";
 
 interface CodeEditorProps {
   initialValue?: string;
@@ -21,24 +22,35 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   autoFormat = true,
   onChange,
 }) => {
+  const timer = useRef<NodeJS.Timer>();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   const prettifyContent = useCallback(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
+    try {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
 
-    const model = editor.getModel();
-    if (!model) return;
+      timer.current = setTimeout(() => {
+        const editor = editorRef.current;
+        if (!editor) return;
 
-    const formatted = prettier.format(model.getValue(), {
-      parser: "babel",
-      plugins: [parser],
-      useTabs: false,
-      semi: true,
-    });
+        const model = editor.getModel();
+        if (!model) return;
 
-    editor.setValue(formatted);
-    editor.setPosition({ lineNumber: model.getLineCount() + 1, column: 0 });
+        const formatted = prettier.format(model.getValue(), {
+          parser: "babel",
+          plugins: [parser],
+          useTabs: false,
+          semi: true,
+        });
+
+        editor.setValue(formatted);
+        editor.setPosition({ lineNumber: model.getLineCount() + 1, column: 0 });
+      }, 250);
+    } catch (error) {
+      // Parse error
+    }
   }, [editorRef]);
 
   useSave(() => {
@@ -61,23 +73,25 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <MonacoEditor
-      theme="vs-dark"
-      defaultLanguage="javascript"
-      defaultValue={initialValue}
-      onMount={onEditorMount}
-      height={240}
-      options={{
-        wordWrap: "on",
-        minimap: { enabled: false },
-        folding: false,
-        lineNumbersMinChars: 3,
-        fontSize: 16,
-        scrollBeyondLastLine: false,
-        automaticLayout: true,
-      }}
-      wrapperProps={{ className: "editor-wrapper" }}
-    />
+    <div className="editor">
+      <MonacoEditor
+        theme="vs-dark"
+        defaultLanguage="javascript"
+        defaultValue={initialValue}
+        onMount={onEditorMount}
+        height="100%"
+        options={{
+          wordWrap: "on",
+          minimap: { enabled: false },
+          folding: false,
+          lineNumbersMinChars: 3,
+          fontSize: 16,
+          scrollBeyondLastLine: false,
+          automaticLayout: true,
+        }}
+        wrapperProps={{ className: "editor-wrapper" }}
+      />
+    </div>
   );
 };
 

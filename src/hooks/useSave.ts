@@ -11,7 +11,7 @@ const useSave = (callback: SaveCallback) => {
     }
 
     const listener = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key.match(/s/i)) {
+      if (event.ctrlKey && event.key.match(/s$/i)) {
         event.preventDefault();
         callbackRef.current();
       }

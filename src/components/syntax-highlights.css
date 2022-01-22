@@ -145,3 +145,6 @@
 .editor-wrapper .mtk1.JSXIdentifier.JSXElement {
   color: #ec5f67;
 }
+.editor-wrapper .mtk8.JSXElement.JSXText {
+  color: #ede0e0;
+}
