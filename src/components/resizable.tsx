@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { ResizableBox, ResizableBoxProps } from "react-resizable";
+import {
+  ResizableBox,
+  ResizableBoxProps,
+  ResizeCallbackData,
+} from "react-resizable";
+import { debounce } from "../utils";
 
 import "./resizable.css";
 
@@ -9,21 +14,31 @@ interface GetResizableBoxPropsArgs {
   direction: Direction;
   innerWidth: number;
   innerHeight: number;
+  width: number;
 }
 
 interface ResizableProps {
   direction: Direction;
 }
 
+function getInitialWidth(direction: Direction) {
+  if (direction === "vertical") {
+    return Infinity;
+  }
+
+  return window.innerWidth * 0.75;
+}
+
 function getResizableBoxProps({
   direction,
   innerWidth,
   innerHeight,
+  width,
 }: GetResizableBoxPropsArgs): ResizableBoxProps {
   if (direction === "horizontal") {
     return {
       className: "resizable--horizontal",
-      width: innerWidth * 0.75,
+      width,
       height: Infinity,
       minConstraints: [innerWidth * 0.2, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
@@ -41,14 +56,15 @@ function getResizableBoxProps({
 }
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
+  const [width, setWidth] = useState(getInitialWidth(direction));
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
 
   useEffect(() => {
-    const resizeHandler = () => {
+    const resizeHandler = debounce<any>(() => {
       setInnerWidth(window.innerWidth);
       setInnerHeight(window.innerHeight);
-    };
+    }, 250);
 
     window.addEventListener("resize", resizeHandler);
     return () => {
@@ -56,9 +72,17 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     };
   }, []);
 
+  function onResizeStop(
+    event: React.SyntheticEvent,
+    { size: { width } }: ResizeCallbackData
+  ) {
+    setWidth(width);
+  }
+
   return (
     <ResizableBox
-      {...getResizableBoxProps({ direction, innerHeight, innerWidth })}
+      onResizeStop={onResizeStop}
+      {...getResizableBoxProps({ direction, innerHeight, innerWidth, width })}
     >
       {children}
     </ResizableBox>
