@@ -7,7 +7,9 @@ import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import useSave from "../hooks/useSave";
 
+import { registerSnippets } from "../snippets/monaco-snippets";
 import JSXHighlighter from "../utils/JSXHighlighter";
+
 import "./syntax-highlights.css";
 import "./code-editor.css";
 
@@ -57,17 +59,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     if (autoFormat) prettifyContent();
   });
 
-  const onEditorMount: OnMount = (monacoEditor) => {
-    const jsxHighlighter = new JSXHighlighter(monacoEditor);
+  const onEditorMount: OnMount = async (monacoEditor, monaco) => {
+    await registerSnippets(monaco);
 
+    const jsxHighlighter = new JSXHighlighter(monacoEditor);
     monacoEditor.onDidChangeModelContent(() => {
       onChange(monacoEditor.getValue());
       jsxHighlighter.highlightJSX();
     });
-    const model = monacoEditor.getModel();
-    if (!model) return;
-
-    model.updateOptions({ tabSize: 2 });
+    monacoEditor.getModel()?.updateOptions({ tabSize: 2 });
 
     editorRef.current = monacoEditor;
   };
