@@ -22,7 +22,7 @@ const CodeCell: React.FC = () => {
   }, 2000);
 
   return (
-    <React.Fragment>
+    <div className="container">
       <Resizable direction="vertical">
         <section className="code-cell">
           <Resizable direction="horizontal">
@@ -31,7 +31,7 @@ const CodeCell: React.FC = () => {
           <Preview code={code} error={error} />
         </section>
       </Resizable>
-    </React.Fragment>
+    </div>
   );
 };
 
