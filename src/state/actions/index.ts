@@ -11,8 +11,8 @@ export interface MoveCellAction {
   };
 }
 
-export interface InsertCellBeforeAction {
-  type: ActionType.InsertCellBefore;
+export interface InsertCellAfterAction {
+  type: ActionType.InsertCellAfter;
   payload: { id?: string; type: CellType };
 }
 
@@ -30,6 +30,6 @@ export interface DeleteCellAction {
 
 export type Action =
   | MoveCellAction
-  | InsertCellBeforeAction
+  | InsertCellAfterAction
   | UpdateCellAction
   | DeleteCellAction;

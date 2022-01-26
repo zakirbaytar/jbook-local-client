@@ -1,7 +1,7 @@
 import {
   Action,
   DeleteCellAction,
-  InsertCellBeforeAction,
+  InsertCellAfterAction,
   MoveCellAction,
   UpdateCellAction,
 } from "../actions";
@@ -31,7 +31,7 @@ function generateHandlers(state: CellsReducerState) {
 
   const moveCell = ({ payload: { id, direction } }: MoveCellAction) => {
     const index = findOrderIndexById(id);
-    const targetIndex = direction === "up" ? index + 1 : index - 1;
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
 
     if (targetIndex < 0 || targetIndex >= state.order.length) {
       return state;
@@ -42,9 +42,9 @@ function generateHandlers(state: CellsReducerState) {
     return state;
   };
 
-  const insertCellBefore = ({
+  const insertCellAfter = ({
     payload: { id, type },
-  }: InsertCellBeforeAction) => {
+  }: InsertCellAfterAction) => {
     const cell: Cell = {
       id: randomId(),
       content: "",
@@ -54,10 +54,10 @@ function generateHandlers(state: CellsReducerState) {
     state.data[cell.id] = cell;
 
     if (!id) {
-      state.order.push(cell.id);
+      state.order.unshift(cell.id);
     } else {
       const index = findOrderIndexById(id);
-      state.order.splice(index, 0, cell.id);
+      state.order.splice(index + 1, 0, cell.id);
     }
 
     return state;
@@ -76,21 +76,21 @@ function generateHandlers(state: CellsReducerState) {
 
   return {
     moveCell,
-    insertCellBefore,
+    insertCellAfter,
     updateCell,
     deleteCell,
   };
 }
 
 const reducer = produce((state: Draft<CellsReducerState>, action: Action) => {
-  const { moveCell, insertCellBefore, updateCell, deleteCell } =
+  const { moveCell, insertCellAfter, updateCell, deleteCell } =
     generateHandlers(state);
 
   switch (action.type) {
     case ActionType.MoveCell:
       return moveCell(action);
-    case ActionType.InsertCellBefore:
-      return insertCellBefore(action);
+    case ActionType.InsertCellAfter:
+      return insertCellAfter(action);
     case ActionType.UpdateCell:
       return updateCell(action);
     case ActionType.DeleteCell:
