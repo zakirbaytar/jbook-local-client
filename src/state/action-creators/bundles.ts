@@ -13,7 +13,6 @@ export const createBundle = ({ cellId, input }: CreateBundleArgs) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch({ type: ActionType.BundleStart, payload: { cellId } });
     const result = await bundle(input);
-    console.log("Bundling");
     dispatch({
       type: ActionType.BundleComplete,
       payload: { cellId, bundle: { code: result.code, error: result.error } },
