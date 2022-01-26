@@ -41,15 +41,17 @@ const CodeCell: React.FC<Cell> = ({ id, content }) => {
             onChange={(value) => updateCell(id, value)}
           />
         </Resizable>
-        {!bundle || bundle.loading ? (
-          <ProgressBar
-            wrapperClassName="progress-cover"
-            color="primary"
-            size="medium"
-          />
-        ) : (
-          <Preview code={bundle.code} error={bundle.error} />
-        )}
+        <aside className="preview-wrapper">
+          {!bundle || bundle.loading ? (
+            <ProgressBar
+              wrapperClassName="progress-cover"
+              color="primary"
+              size="medium"
+            />
+          ) : (
+            <Preview code={bundle.code} error={bundle.error} />
+          )}
+        </aside>
       </div>
     </Resizable>
   );

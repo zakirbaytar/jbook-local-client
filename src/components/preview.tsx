@@ -44,7 +44,7 @@ const Preview: React.FC<PreviewProps> = ({ code, error }) => {
   useMessage({ ref: iframe, type: "bundle_error", data: error });
 
   return (
-    <aside className="preview">
+    <div className="preview">
       <iframe
         className="preview__frame"
         srcDoc={previewSource}
@@ -52,7 +52,7 @@ const Preview: React.FC<PreviewProps> = ({ code, error }) => {
         title="preview"
         sandbox="allow-scripts"
       />
-    </aside>
+    </div>
   );
 };
 
