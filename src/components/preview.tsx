@@ -55,24 +55,33 @@ const Preview: React.FC<PreviewProps> = ({ code, error }) => {
 
   function postMessage({ type, data }: PostMessageArgs) {
     iframe.current.srcdoc = html;
-    setTimeout(() => {
+    return setTimeout(() => {
       const message = JSON.stringify({ type, data });
       iframe.current.contentWindow.postMessage(message, "*");
     }, 50);
   }
 
   useEffect(() => {
-    postMessage({ type: "execute_code", data: code });
+    const timer = postMessage({ type: "execute_code", data: code });
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [code]);
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (error) {
-      postMessage({ type: "bundle_error", data: error });
+      timer = postMessage({ type: "bundle_error", data: error });
     }
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [error]);
 
   return (
-    <div className="preview">
+    <aside className="preview">
       <iframe
         className="preview__frame"
         srcDoc={html}
@@ -80,7 +89,7 @@ const Preview: React.FC<PreviewProps> = ({ code, error }) => {
         title="preview"
         sandbox="allow-scripts"
       />
-    </div>
+    </aside>
   );
 };
 
