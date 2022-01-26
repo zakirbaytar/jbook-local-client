@@ -40,7 +40,7 @@ export interface BundleCompleteAction {
   payload: {
     cellId: string;
     bundle: {
-      code?: string;
+      code: string;
       error?: string;
     };
   };
