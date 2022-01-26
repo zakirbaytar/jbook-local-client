@@ -73,7 +73,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   return (
-    <div className="editor">
+    <main className="editor">
       <MonacoEditor
         theme="vs-dark"
         defaultLanguage="javascript"
@@ -91,7 +91,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         }}
         wrapperProps={{ className: "editor-wrapper" }}
       />
-    </div>
+    </main>
   );
 };
 

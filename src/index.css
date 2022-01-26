@@ -1,6 +1,9 @@
 :root {
   --background-color: #1f2d3b;
   --color: #d4d4d4;
+  --btn-primary-bg: #df691a;
+  --btn-primary-bg-hover: #d16318;
+  --btn-primary-color: #fff;
 }
 
 body {
@@ -19,6 +22,34 @@ code {
     monospace;
 }
 
-.container {
-  margin-bottom: 2rem;
+.fi {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+button.btn {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-color: transparent;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.btn.btn--primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-color);
+}
+
+.btn.btn--primary:hover {
+  background-color: var(--btn-primary-bg-hover);
+}
+
+.btn.btn--rounded {
+  border-radius: 1.5rem !important;
 }

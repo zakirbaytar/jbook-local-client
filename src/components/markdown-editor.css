@@ -6,16 +6,21 @@
   --md-editor-icon: #d4d4d4;
 }
 
-.markdown-editor.preview {
+.markdown-cell .preview {
   padding: 2rem;
   border: 1px solid var(--md-editor-border);
 }
 
-.markdown-editor .w-md-editor-bar svg {
+.markdown-cell .editor .w-md-editor,
+.markdown-cell .editor .w-md-editor-toolbar {
+  border-radius: 0 !important;
+}
+
+.markdown-cell .editor .w-md-editor-bar svg {
   visibility: hidden;
 }
 
-.markdown-editor .w-md-editor-bar {
+.markdown-cell .editor .w-md-editor-bar {
   height: 12px;
   width: 100%;
   cursor: row-resize;
@@ -25,67 +30,67 @@
   background-position: 50%;
 }
 
-.markdown-editor em {
+.markdown-cell .editor em {
   font-style: italic;
 }
 
-.markdown-editor .wmde-markdown hr {
+.markdown-cell .editor .wmde-markdown hr {
   border-top: 1px solid #dee5ed;
 }
 
-.markdown-editor .wmde-markdown ol {
+.markdown-cell .editor .wmde-markdown ol {
   list-style: decimal;
 }
 
-.markdown-editor .w-md-editor-show-live {
+.markdown-cell .editor .w-md-editor-show-live {
   /* Hide menu bar buttons to prevent accidental delete */
   z-index: 20;
 }
 
-.markdown-editor .w-md-editor-toolbar {
+.markdown-cell .editor .w-md-editor-toolbar {
   background-color: var(--md-editor-background);
   border-bottom: 1px solid var(--md-editor-border);
 }
 
-.markdown-editor .w-md-editor-toolbar li button {
+.markdown-cell .editor .w-md-editor-toolbar li button {
   color: var(--md-editor-icon);
 }
 
-.markdown-editor .w-md-editor-content {
+.markdown-cell .editor .w-md-editor-content {
   background-color: #202123;
 }
 
-.markdown-editor .w-md-editor,
-.markdown-editor .w-md-editor .w-md-editor-text-pre {
+.markdown-cell .editor .w-md-editor,
+.markdown-cell .editor .w-md-editor .w-md-editor-text-pre {
   color: var(--md-editor-content-color);
 }
 
-.markdown-editor .w-md-editor-text-pre .bold {
+.markdown-cell .editor .w-md-editor-text-pre .bold {
   color: unset;
 }
 
-.markdown-editor .token.list.punctuation {
+.markdown-cell .editor .token.list.punctuation {
   background-color: unset;
 }
 
-.markdown-editor .w-md-editor-preview {
+.markdown-cell .editor .w-md-editor-preview {
   box-shadow: inset 1px 0 0 0 var(--md-editor-border);
 }
 
-.markdown-editor .wmde-markdown-color code[class="language-markdown"] {
+.markdown-cell .editor .wmde-markdown-color code[class="language-markdown"] {
   color: var(--md-editor-content-color);
 }
 
-.markdown-editor .w-md-editor-text-pre .title,
-.markdown-editor .w-md-editor-text-pre .bold {
+.markdown-cell .editor .w-md-editor-text-pre .title,
+.markdown-cell .editor .w-md-editor-text-pre .bold {
   color: var(--md-editor-content-color) !important;
 }
 
-.markdown-editor .w-md-editor-toolbar li.active svg,
-.markdown-editor .w-md-editor-toolbar li button:hover svg {
+.markdown-cell .editor .w-md-editor-toolbar li.active svg,
+.markdown-cell .editor .w-md-editor-toolbar li button:hover svg {
   color: #000;
 }
 
-.markdown-editor .wmde-markdown li {
+.markdown-cell .preview ul li.task-list-item {
   list-style-type: none;
 }

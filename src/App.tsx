@@ -1,12 +1,13 @@
-import CodeCell from "./components/code-cell";
-import MarkdownEditor from "./components/markdown-editor";
+import { Provider } from "react-redux";
+import { store } from "./state";
+
+import CellList from "./components/cell-list";
 
 function App() {
   return (
-    <>
-      <CodeCell />
-      <MarkdownEditor />
-    </>
+    <Provider store={store}>
+      <CellList />
+    </Provider>
   );
 }
 

@@ -1,46 +1,42 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import MDEditor from "@uiw/react-md-editor";
+
+import { useActions } from "../hooks/useActions";
+import { useOutsideClick } from "../hooks/useOutsideClick";
+
+import { Cell } from "../state";
 
 import "./markdown-editor.css";
 
-interface MarkdownEditorProps {}
+const MarkdownEditor: React.FC<Cell> = ({ id, content }) => {
+  const { updateCell } = useActions();
+  const [isEditing, setIsEditing] = useState(false);
 
-const MarkdownEditor: React.FC<MarkdownEditorProps> = () => {
   const markdownRef = useRef<HTMLDivElement>(null);
-  const [isEditing, setIsEditing] = useState(true);
-  const [input, setInput] = useState("");
 
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (
-        markdownRef.current &&
-        event.target &&
-        markdownRef.current.contains(event.target as Node)
-      ) {
-        return;
-      }
-
-      setIsEditing(false);
-    };
-    document.addEventListener("click", handleClick, { capture: true });
-
-    return () => {
-      document.addEventListener("click", handleClick, { capture: true });
-    };
-  }, []);
+  useOutsideClick(markdownRef, () => {
+    setIsEditing(false);
+  });
 
   if (isEditing) {
     return (
-      <div className="markdown-editor" ref={markdownRef}>
-        <MDEditor value={input} onChange={(value) => setInput(value ?? "")} />
-      </div>
+      <section className="markdown-cell" ref={markdownRef}>
+        <main className="editor">
+          <MDEditor
+            value={content}
+            onChange={(value) => updateCell(id, value ?? "")}
+          />
+        </main>
+      </section>
     );
   }
 
   return (
-    <div className="markdown-editor preview" onClick={() => setIsEditing(true)}>
-      <MDEditor.Markdown source={input} />
-    </div>
+    <section className="markdown-cell">
+      <main className="preview" onClick={() => setIsEditing(true)}>
+        <MDEditor.Markdown source={content || "Click to edit"} />
+      </main>
+    </section>
   );
 };
 
