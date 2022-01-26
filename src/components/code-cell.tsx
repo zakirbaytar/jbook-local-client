@@ -1,37 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Resizable from "./resizable";
 import CodeEditor from "./code-editor";
 import Preview from "./preview";
 
 import { bundle } from "../bundler";
-import { debounce } from "../utils";
 
 import "./code-cell.css";
+import { Cell } from "../state";
+import { useActions } from "../hooks/useActions";
 
-const CodeCell: React.FC = () => {
+const CodeCell: React.FC<Cell> = ({ id, content }) => {
+  const { updateCell } = useActions();
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
 
-  const onChange = debounce<any>(async (value) => {
-    const output = await bundle(value);
-    if (!output) return;
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const output = await bundle(content);
+      setCode(output.code);
+      setError(output.error);
+    }, 1000);
 
-    setCode(output.code);
-    setError(output.error);
-  }, 2000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [content]);
 
   return (
-    <div className="container">
-      <Resizable direction="vertical">
-        <section className="code-cell">
-          <Resizable direction="horizontal">
-            <CodeEditor onChange={onChange} />
-          </Resizable>
-          <Preview code={code} error={error} />
-        </section>
-      </Resizable>
-    </div>
+    <Resizable direction="vertical">
+      <div className="code-cell">
+        <Resizable direction="horizontal">
+          <CodeEditor
+            initialValue={content}
+            onChange={(value) => updateCell(id, value)}
+          />
+        </Resizable>
+        <Preview code={code} error={error} />
+      </div>
+    </Resizable>
   );
 };
 
