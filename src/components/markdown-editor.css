@@ -91,6 +91,6 @@
   color: #000;
 }
 
-.markdown-cell .editor .wmde-markdown li {
+.markdown-cell .preview ul li.task-list-item {
   list-style-type: none;
 }
