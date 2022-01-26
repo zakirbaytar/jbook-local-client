@@ -47,6 +47,7 @@ function getResizableBoxProps({
   }
 
   return {
+    className: "resizable--vertical",
     width: Infinity,
     height: 300,
     minConstraints: [Infinity, 24],
