@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 import { useSelector } from "../hooks/useSelector";
 import { useActions } from "../hooks/useActions";
+import { useCumulativeCode } from "../hooks/useCumulativeCode";
 
 import Resizable from "./resizable";
 import CodeEditor from "./code-editor";
@@ -15,22 +16,23 @@ import "./code-cell.css";
 const CodeCell: React.FC<Cell> = ({ id, content }) => {
   const { updateCell, createBundle } = useActions();
   const bundle = useSelector((state) => state.bundles[id]);
+  const cumulativeCode = useCumulativeCode(id);
 
   useEffect(() => {
     if (!bundle) {
-      createBundle({ cellId: id, input: content });
+      createBundle({ cellId: id, input: cumulativeCode });
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle({ cellId: id, input: content });
+      createBundle({ cellId: id, input: cumulativeCode });
     }, 1000);
 
     return () => {
       clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createBundle, id, content]);
+  }, [createBundle, id, cumulativeCode]);
 
   return (
     <Resizable direction="vertical">
