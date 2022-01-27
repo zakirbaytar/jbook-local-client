@@ -28,8 +28,28 @@ export interface DeleteCellAction {
   };
 }
 
+export interface BundleStartAction {
+  type: ActionType.BundleStart;
+  payload: {
+    cellId: string;
+  };
+}
+
+export interface BundleCompleteAction {
+  type: ActionType.BundleComplete;
+  payload: {
+    cellId: string;
+    bundle: {
+      code: string;
+      error?: string;
+    };
+  };
+}
+
 export type Action =
   | MoveCellAction
   | InsertCellAfterAction
   | UpdateCellAction
-  | DeleteCellAction;
+  | DeleteCellAction
+  | BundleStartAction
+  | BundleCompleteAction;

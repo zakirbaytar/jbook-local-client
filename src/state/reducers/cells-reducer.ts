@@ -1,3 +1,5 @@
+import produce, { Draft } from "immer";
+import { ActionType } from "../action-types";
 import {
   Action,
   DeleteCellAction,
@@ -6,9 +8,6 @@ import {
   UpdateCellAction,
 } from "../actions";
 import { Cell } from "../cell";
-
-import produce, { Draft } from "immer";
-import { ActionType } from "../action-types";
 
 interface CellsReducerState {
   data: { [key: string]: Cell };

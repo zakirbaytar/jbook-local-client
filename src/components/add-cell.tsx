@@ -17,7 +17,7 @@ const AddCell: React.FC<AddCellProps> = ({ previousCellId }) => {
           className="btn btn--primary btn--rounded"
           onClick={() => insertCellAfter({ id: previousCellId, type: "code" })}
         >
-          <i>+</i>
+          <span>+</span>
           Code
         </button>
         <button
@@ -26,7 +26,7 @@ const AddCell: React.FC<AddCellProps> = ({ previousCellId }) => {
             insertCellAfter({ id: previousCellId, type: "markdown" })
           }
         >
-          <i>+</i>
+          <span>+</span>
           Text
         </button>{" "}
       </div>

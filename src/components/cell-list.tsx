@@ -4,6 +4,8 @@ import { useSelector } from "../hooks/useSelector";
 import AddCell from "./add-cell";
 import CellListItem from "./cell-list-item";
 
+import "./cell-list.css";
+
 interface CellListProps {}
 
 const CellList: React.FC<CellListProps> = () => {
@@ -12,7 +14,7 @@ const CellList: React.FC<CellListProps> = () => {
   });
 
   return (
-    <div>
+    <div className="cell-list">
       <AddCell />
       {cells.map((cell) => (
         <Fragment key={cell.id}>
