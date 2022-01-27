@@ -1921,6 +1921,11 @@ const Snippets: { [key: string]: Snippet } = {
     ],
     description: "Creates a React Custom Hook with ES7 module system",
   },
+  render: {
+    prefix: "render",
+    body: "render(${1:element})",
+    description: "Renders an element",
+  },
 };
 
 export default Snippets;
