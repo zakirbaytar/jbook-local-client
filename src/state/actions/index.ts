@@ -64,6 +64,13 @@ export interface FetchCellsErrorAction {
   };
 }
 
+export interface SaveCellsErrorAction {
+  type: ActionType.SaveCellsError;
+  payload: {
+    error: string;
+  };
+}
+
 export type Action =
   | MoveCellAction
   | InsertCellAfterAction
@@ -73,4 +80,5 @@ export type Action =
   | BundleCompleteAction
   | FetchCellsAction
   | FetchCellsCompleteAction
-  | FetchCellsErrorAction;
+  | FetchCellsErrorAction
+  | SaveCellsErrorAction;
