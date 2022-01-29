@@ -3,6 +3,8 @@ import { ActionType } from "../action-types";
 import {
   Action,
   DeleteCellAction,
+  FetchCellsCompleteAction,
+  FetchCellsErrorAction,
   InsertCellAfterAction,
   MoveCellAction,
   UpdateCellAction,
@@ -73,27 +75,59 @@ function generateHandlers(state: CellsReducerState) {
     return state;
   };
 
+  const fetchCells = () => {
+    state.loading = true;
+    state.error = null;
+    return state;
+  };
+
+  const fetchCellsComplete = ({
+    payload: { cells },
+  }: FetchCellsCompleteAction) => {
+    state.loading = false;
+    state.data = cells.reduce((cells, cell) => {
+      cells[cell.id] = cell;
+      return cells;
+    }, {} as CellsReducerState["data"]);
+    state.order = cells.map((cell) => cell.id);
+    return state;
+  };
+
+  const fetchCellsError = ({ payload: { error } }: FetchCellsErrorAction) => {
+    state.loading = false;
+    state.error = error;
+    return state;
+  };
+
   return {
     moveCell,
     insertCellAfter,
     updateCell,
     deleteCell,
+    fetchCells,
+    fetchCellsComplete,
+    fetchCellsError,
   };
 }
 
 const reducer = produce((state: Draft<CellsReducerState>, action: Action) => {
-  const { moveCell, insertCellAfter, updateCell, deleteCell } =
-    generateHandlers(state);
+  const handlers = generateHandlers(state);
 
   switch (action.type) {
     case ActionType.MoveCell:
-      return moveCell(action);
+      return handlers.moveCell(action);
     case ActionType.InsertCellAfter:
-      return insertCellAfter(action);
+      return handlers.insertCellAfter(action);
     case ActionType.UpdateCell:
-      return updateCell(action);
+      return handlers.updateCell(action);
     case ActionType.DeleteCell:
-      return deleteCell(action);
+      return handlers.deleteCell(action);
+    case ActionType.FetchCells:
+      return handlers.fetchCells();
+    case ActionType.FetchCellsComplete:
+      return handlers.fetchCellsComplete(action);
+    case ActionType.FetchCellsError:
+      return handlers.fetchCellsError(action);
     default:
       return state;
   }
