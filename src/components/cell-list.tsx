@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
+import { useActions } from "../hooks/useActions";
 import { useSelector } from "../hooks/useSelector";
 
 import AddCell from "./add-cell";
@@ -9,6 +10,12 @@ import "./cell-list.css";
 interface CellListProps {}
 
 const CellList: React.FC<CellListProps> = () => {
+  const { fetchCells } = useActions();
+
+  useEffect(() => {
+    fetchCells();
+  }, []);
+
   const cells = useSelector(({ cells: { order, data } }) => {
     return order.map((id) => data[id]);
   });

@@ -5,4 +5,8 @@ export enum ActionType {
   DeleteCell = "delete_cell",
   BundleStart = "bundle_start",
   BundleComplete = "bundle_complete",
+  FetchCells = "fetch_cells",
+  FetchCellsComplete = "fetch_cells_complete",
+  FetchCellsError = "fetch_cells_error",
+  SaveCellsError = "save_cells_error",
 }
